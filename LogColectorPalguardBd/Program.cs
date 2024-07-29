@@ -5,11 +5,11 @@ namespace MonitorLog
 {
     class Program
     {
-        static string pastaMonitorada = @"\\OPTSUKE01\palguard\logs";
+        static string pastaMonitorada;
         static string arquivoLog = "";
         static string arquivoLastLog = "";
-        static string conexaoBD = "Server=192.168.100.84;Database=db-palworld-pvp-insiderhub;Uid=PalAdm;Pwd=sukelord;";
-        static long ultimaPosicao = 4589;
+        static string conexaoBD;
+        static long ultimaPosicao;
         static int quantidadeReinicio = 0;
         static string statusRede = "";
         static FileSystemWatcher watcher;
@@ -18,9 +18,16 @@ namespace MonitorLog
 
         static void Main(string[] args)
         {
+            InicializarEnv();
             InicializarWatcher();
             IniciarMonitoramento();
             Console.ReadLine();
+        }
+        static void InicializarEnv()
+        {
+            pastaMonitorada = Environment.GetEnvironmentVariable("PASTA_MONITORADA") ?? @"\\OPTSUKE01\palguard\logs";
+            conexaoBD = Environment.GetEnvironmentVariable("CONEXAO_BD") ?? "Server=192.168.100.84;Database=db-palworld-pvp-insiderhub;Uid=PalAdm;Pwd=sukelord;";
+            ultimaPosicao = long.TryParse(Environment.GetEnvironmentVariable("ULTIMA_POSICAO"), out var posicao) ? posicao : 4589;
         }
 
         static void InicializarWatcher()
