@@ -12,6 +12,7 @@ namespace MonitorLog
         static string arquivoLastLog = "";
         static string conexaoBD;
         static long ultimaPosicao;
+        static long primeiraPosicao;
         static int quantidadeReinicio = 0;
         static int logDesatualizado = 0;
         static int tempoDeLogDesatualizado;
@@ -22,6 +23,7 @@ namespace MonitorLog
         static string apiUrl = "http://201.14.75.202:8212/v1/api/info";
         static string username = "admin";
         static string password = "unreal";
+
 
 
         static void Main(string[] args)
@@ -37,11 +39,11 @@ namespace MonitorLog
             //Console.WriteLine("Pressione 'q' e Enter para sair...");
             while (true)
             {
-                
+
 
                 if (logDesatualizado >= contagemTempoLog)
                 {
-                    
+
                     var verificaServidorTask = VerificaServidor();
                     verificaServidorTask.Wait();  // Aguarda a conclusão da tarefa
                     bool servidorOk = verificaServidorTask.Result;
@@ -53,7 +55,7 @@ namespace MonitorLog
                         Console.WriteLine(DateTime.Now - inicio);
                         break;
                     }
-                    else 
+                    else
                     {
                         //Console.WriteLine(DateTime.Now - inicio);
                         //Console.WriteLine(DateTime.Now + " Servidor Online, aguardando logs");
@@ -61,7 +63,7 @@ namespace MonitorLog
                         //inicio = DateTime.Now;
                     }
 
-                    
+
 
                 }
 
@@ -76,6 +78,7 @@ namespace MonitorLog
             conexaoBD = Environment.GetEnvironmentVariable("CONEXAO_BD") ?? "Server=192.168.100.84;Database=db-palworld-pvp-insiderhub;Uid=PalAdm;Pwd=sukelord;";
             ultimaPosicao = long.TryParse(Environment.GetEnvironmentVariable("ULTIMA_POSICAO"), out var posicao) ? posicao : 4589;
             tempoDeLogDesatualizado = int.TryParse(Environment.GetEnvironmentVariable("TEMPO_DE_LOG_DESATUALIZADO"), out var eLogDesatualizado) ? eLogDesatualizado : 30;
+            primeiraPosicao = ultimaPosicao;
 
         }
 
@@ -225,6 +228,8 @@ namespace MonitorLog
             {
                 using (StreamReader sr = new StreamReader(new FileStream(arquivoLog, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
                 {
+
+                    VerificaArquivoNovoProLinhas(sr);
                     sr.BaseStream.Seek(ultimaPosicao, SeekOrigin.Begin);
 
                     if (statusRede == "REDE INDISPONIVEL")
@@ -317,7 +322,7 @@ namespace MonitorLog
             return contagem;
         }
 
-        public static async Task<bool> VerificaServidor() 
+        public static async Task<bool> VerificaServidor()
         {
             try
             {
@@ -363,6 +368,23 @@ namespace MonitorLog
                 }
             }
         }
+        static bool VerificaArquivoNovoProLinhas(StreamReader sr)
+        {
+            FileInfo fileInfo = new FileInfo(arquivoLog);
+            long tamanhoAtualArquivo = fileInfo.Length;
 
+            if (ultimaPosicao > tamanhoAtualArquivo + 1)
+            {
+                // Se o tamanho do arquivo mudou ou a posição está fora do arquivo, reinicia a leitura
+                ultimaPosicao = primeiraPosicao;
+                return false;
+
+            }
+            else
+            {
+                // Se a posição está dentro do arquivo, continua a partir da última posição
+                return true;
+            }
+        }
     }
 }
