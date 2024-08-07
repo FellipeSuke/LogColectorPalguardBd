@@ -149,7 +149,8 @@ namespace MonitorLog
             catch (Exception ex)
             {
                 Console.WriteLine($"[{DateTime.Now}] Erro ao forçar a leitura do arquivo mais recente: {ex.Message}");
-                LerArquivoLog();
+                throw;
+                
             }
         }
 
