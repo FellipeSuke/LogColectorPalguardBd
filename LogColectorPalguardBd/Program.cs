@@ -250,7 +250,7 @@ namespace MonitorLog
                     {
                         if (!string.IsNullOrWhiteSpace(linha))
                         {
-                            if (linha.ToString().Contains(" \'info\'"))
+                            if (linha.ToString().Contains(" \'Info\'"))
                             {
                                 Console.WriteLine($"[{DateTime.Now}] Linha Ignorada: {linha}");
                                 logDesatualizado = 0;
