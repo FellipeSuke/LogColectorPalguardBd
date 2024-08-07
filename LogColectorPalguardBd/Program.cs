@@ -250,11 +250,21 @@ namespace MonitorLog
                     {
                         if (!string.IsNullOrWhiteSpace(linha))
                         {
-                            //Console.WriteLine($"[{DateTime.Now}] Linha lida: {linha}");
-                            linhas.Add(linha);
-                            logDesatualizado = 0;
-                            ultimaPosicao = sr.BaseStream.Position;
-
+                            if (linha.ToString().Contains(" \'info\'"))
+                            {
+                                Console.WriteLine($"[{DateTime.Now}] Linha Ignorada: {linha}");
+                            }
+                            else if (linha.ToString().Contains(" \'ShowPlayers\'"))
+                            {
+                                Console.WriteLine($"[{DateTime.Now}] Linha Ignorada: {linha}");
+                            }
+                            else
+                            {
+                                //Console.WriteLine($"[{DateTime.Now}] Linha lida: {linha}");
+                                linhas.Add(linha);
+                                logDesatualizado = 0;
+                                ultimaPosicao = sr.BaseStream.Position;
+                            }
                         }
                     }
 
