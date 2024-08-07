@@ -253,10 +253,14 @@ namespace MonitorLog
                             if (linha.ToString().Contains(" \'info\'"))
                             {
                                 Console.WriteLine($"[{DateTime.Now}] Linha Ignorada: {linha}");
+                                logDesatualizado = 0;
+                                ultimaPosicao = sr.BaseStream.Position;
                             }
                             else if (linha.ToString().Contains(" \'ShowPlayers\'"))
                             {
                                 Console.WriteLine($"[{DateTime.Now}] Linha Ignorada: {linha}");
+                                logDesatualizado = 0;
+                                ultimaPosicao = sr.BaseStream.Position;
                             }
                             else
                             {
