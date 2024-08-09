@@ -125,7 +125,7 @@ namespace MonitorLog
                     while ((linha = sr.ReadLine()) != null)
                     {
                         logDesatualizado = 0;
-                        if (!string.IsNullOrWhiteSpace(linha) && !linha.Contains(" 'Info'") && !linha.Contains(" 'ShowPlayers'"))
+                        if (!string.IsNullOrWhiteSpace(linha) && !linha.Contains(" 'Info'") && !linha.Contains(" 'ShowPlayers'") && !linha.Contains(" [debug] Registered "))
                         {
                             linhas.Add(linha);
                         }
