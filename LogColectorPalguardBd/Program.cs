@@ -20,14 +20,21 @@ namespace MonitorLog
         static void Main(string[] args)
         {
             Console.WriteLine("Entrando no método Main.");
-
+            string versionApp = "2.0.0";
             InicializarEnv();
-            Console.WriteLine("LogMonitorPalguardDb Version 2.0.0");
-
+            List<string> iniciaApp = new List<string>();
+            iniciaApp.Add($"LogMonitorPalguardDb Iniciado Version "+ versionApp);
+            InserirNoBancoAsync(iniciaApp, "LogMonitorPalguardDb");
+            Console.WriteLine(iniciaApp[0]);
             IniciarMonitoramento();
 
             Console.WriteLine("Pressione 'Ctrl + C' para sair...");
-            Console.ReadLine();
+
+            // Loop infinito para manter o aplicativo em execução
+            while (true)
+            {
+                Thread.Sleep(1000); // Aguarda 1 segundo
+            }
         }
 
         static void InicializarEnv()
@@ -128,7 +135,7 @@ namespace MonitorLog
                     {
                         ultimaPosicao = sr.BaseStream.Position;
                         Console.WriteLine($"[{DateTime.Now}] Novas linhas lidas: {linhas.Count}. Atualizando ultimaPosicao para {ultimaPosicao}");
-                        InserirNoBancoAsync(linhas,Path.GetFileName(arquivoLog)).Wait();
+                        InserirNoBancoAsync(linhas, Path.GetFileName(arquivoLog)).Wait();
                         logDesatualizado = 0;
                     }
                     else
@@ -191,7 +198,10 @@ namespace MonitorLog
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[{DateTime.Now}] Servidor offline ou erro ao verificar: {ex.Message}. Encerrando monitoramento.");
+                List<string> errors = new List<string>();
+                errors.Add($"[{DateTime.Now}] Servidor offline ou erro ao verificar: {ex.Message}. Encerrando monitoramento.");
+                InserirNoBancoAsync(errors, arquivoLog);
+                Console.WriteLine(errors[0]);
                 monitorTimer.Stop();
                 Environment.Exit(0);  // Terminar o aplicativo
             }
