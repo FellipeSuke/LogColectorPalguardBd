@@ -5,7 +5,8 @@ services:
       - PASTA_MONITORADA=/palguard/logs
       - CONEXAO_BD=Server=192.168.100.84;Database=db-palworld-pvp-insiderhub;Uid=PalAdm;Pwd=sukelord;SslMode=None;
       - ULTIMA_POSICAO=4589
-      - TEMPO_DE_LOG_DESATUALIZADO=10
+      - TEMPO_DE_LOG_DESATUALIZADO=15
+      - NUMERO_DE_RECONEXAO=5
     volumes:
       - /mnt/smb/palguard:/palguard
     restart: unless-stopped

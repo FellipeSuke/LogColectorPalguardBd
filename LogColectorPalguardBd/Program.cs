@@ -49,7 +49,7 @@ namespace MonitorLog
             conexaoBD = Environment.GetEnvironmentVariable("CONEXAO_BD") ?? "Server=192.168.100.84;Database=db-palworld-pvp-insiderhub;Uid=PalAdm;Pwd=sukelord;";
             ultimaPosicao = long.TryParse(Environment.GetEnvironmentVariable("ULTIMA_POSICAO"), out var posicao) ? posicao : 0;
             tempoDeLogDesatualizado = int.TryParse(Environment.GetEnvironmentVariable("TEMPO_DE_LOG_DESATUALIZADO"), out var eLogDesatualizado) ? eLogDesatualizado : 10;
-            reconexaoLogger = int.TryParse(Environment.GetEnvironmentVariable("TEMPO_DE_LOG_DESATUALIZADO"), out var eReconexaoLogger) ? eReconexaoLogger : 10;
+            reconexaoLogger = int.TryParse(Environment.GetEnvironmentVariable("NUMERO_DE_RECONEXAO"), out var eReconexaoLogger) ? eReconexaoLogger : 10;
 
             Console.WriteLine($"Variáveis Inicializadas: pastaMonitorada={pastaMonitorada}, conexaoBD={conexaoBD}, ultimaPosicao={ultimaPosicao}, tempoDeLogDesatualizado={tempoDeLogDesatualizado}");
         }
